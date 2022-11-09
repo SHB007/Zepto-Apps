@@ -15,8 +15,8 @@
         "web-vitals": "^2.1.2"
     },
     "scripts": {
-        "start": "react-scripts start tailwindcss -i ./src/Style/tailwind.css -o ./src/Style/output.css -w",
-        "build": "react-scripts build tailwindcss -i ./src/Style/tailwind.css -o ./src/Style/output.css -w",
+        "start": "react-scripts start npx tailwindcss -i ./src/Style/tailwind.css -o ./src/Style/output.css -w",
+        "build": "react-scripts build npx tailwindcss -i ./src/Style/tailwind.css -o ./src/Style/output.css -w",
         "test": "react-scripts test",
         "eject": "react-scripts eject"
     },
