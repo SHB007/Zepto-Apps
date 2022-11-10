@@ -10,7 +10,6 @@ function FontList() {
     { id: 4, fontName: 'Roboto-ThinItalic', filePath: 'src/Assets/Roboto-ThinItalic.ttf' }
   ]);
 
-  console.log(fontLists);
   return (
     <div className="w-[90%] mx-auto my-5 bg-white rounded-lg border shadow-md dark:bg-gray-800 dark:border-gray-700">
       <div className="overflow-x-auto relative shadow-md sm:rounded-lg">
