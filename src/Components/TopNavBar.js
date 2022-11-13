@@ -23,14 +23,14 @@ function TopNavBar() {
                   <div
                     onClick={() => { navigate('/uploadFont') }}
                     className=" hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
-                    style={{ background: (location?.pathname == '/uploadFont') ? 'gray' : '' }}
+                    style={{ background: (location?.pathname === '/uploadFont') ? 'gray' : '' }}
                   >
                     Upload Font
                   </div>
                   <div
                     onClick={() => { navigate('/fontList') }}
                     className=" hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
-                    style={{ background: (location?.pathname == '/fontList') ? 'gray' : '' }}
+                    style={{ background: (location?.pathname === '/fontList') ? 'gray' : '' }}
                   >
                     Font List
                   </div>
@@ -38,7 +38,7 @@ function TopNavBar() {
                   <div
                     onClick={() => { navigate('/fontGroup') }}
                     className=" hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
-                    style={{ background: (location?.pathname == '/fontGroup') ? 'gray' : '' }}
+                    style={{ background: (location?.pathname === '/fontGroup') ? 'gray' : '' }}
                   >
                     Font Group
                   </div>
@@ -109,14 +109,14 @@ function TopNavBar() {
                 <div
                   onClick={() => { navigate('/uploadFont') }}
                   className=" hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
-                  style={{ background: (location?.pathname == '/uploadFont') ? 'gray' : '' }}
+                  style={{ background: (location?.pathname === '/uploadFont') ? 'gray' : '' }}
                 >
                   Upload Font
                 </div>
                 <div
                   onClick={() => { navigate('/fontList') }}
                   className=" hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
-                  style={{ background: (location?.pathname == '/fontList') ? 'gray' : '' }}
+                  style={{ background: (location?.pathname === '/fontList') ? 'gray' : '' }}
                 >
                   Font List
                 </div>
@@ -124,7 +124,7 @@ function TopNavBar() {
                 <div
                   onClick={() => { navigate('/fontGroup') }}
                   className=" hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
-                  style={{ background: (location?.pathname == '/fontGroup') ? 'gray' : '' }}
+                  style={{ background: (location?.pathname === '/fontGroup') ? 'gray' : '' }}
                 >
                   Font Group
                 </div>

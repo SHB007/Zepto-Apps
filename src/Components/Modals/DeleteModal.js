@@ -5,21 +5,21 @@ import { DeleteSingleFontGroup } from '../../APIs/FontGroupApi';
 function DeleteModal(props) {
 
     const deleteThisFont = () => {
-        console.log(props)
-        if(props?.mother == 'fontList'){
+        if(props?.mother === 'fontList'){
             DeleteSingleFont(props?.selectedDeleteItemID).then(response => {
-                if (response) {
+                if (response===true) {
                     props.setDeleteItem(false)
                     props.setSuccess(true);
                 } else {
                     console.log(response);
                 }
             });
-        }else if(props?.mother == 'fontGroup'){
+        }else if(props?.mother === 'fontGroup'){
             DeleteSingleFontGroup(props?.selectedDeleteItemID).then(response => {
                 if (response) {
                     props.setDeleteItem(false)
                     props.setSuccess(true);
+                    props.setMessage('You have successfully deleted this font group')
                 } else {
                     console.log(response);
                 }

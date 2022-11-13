@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { FileUploader } from "react-drag-drop-files";
 import { useNavigate } from "react-router-dom";
 import SuccessModal from '../../Components/Modals/SuccessModal';
+import FailModal from '../../Components/Modals/FailModal';
 import { CreateFont } from '../../APIs/FontCreateApi'
 
 const fileTypes = ["ttf", "TTF"];
@@ -12,6 +13,8 @@ function UploadFont() {
     const [selectedFile, setSelectedFile] = useState();
     const [isFileUploaded, setIsFileUploaded] = useState(false);
     const [success, setSuccess] = useState(false);
+    const [fail, setFail] = useState(false);
+    const [failMessage, setFailMessage] = useState(false);
 
     const handleChange = (file) => {
         if ((file?.name)?.split('.')[(file?.name)?.split('.')?.length - 1] === 'ttf' || (file?.name)?.split('.')[(file?.name)?.split('.')?.length - 1] === 'TTF') {
@@ -22,7 +25,10 @@ function UploadFont() {
                     setIsFileUploaded(true);
                     setError(false);
                 } else {
+                    setFail(true);
+                    setFailMessage(response?.data?.message);
                     console.log(response);
+                    setSelectedFile('');
                 }
             })
 
@@ -38,6 +44,9 @@ function UploadFont() {
 
             {success &&
                 <SuccessModal success={success} setSuccess={setSuccess} message={'Your File is Successfully Uploaded.'} />
+            }
+            {fail &&
+                <FailModal fail={fail} setFail={setFail} message={failMessage} />
             }
             {!isFileUploaded &&
                 <FileUploader

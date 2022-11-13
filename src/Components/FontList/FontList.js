@@ -27,26 +27,26 @@ function FontList() {
         console.log(response);
       }
     })
+  }, [success]);
+
+
+  useEffect(() => {
+    fontLists?.forEach(singleFont => {
+      const font = new FontFace(singleFont.fontName, `url(${singleFont.filePath})`, {});
+      console.log(font);
+      // document.fonts.add(font);
+      // document.fonts.load(singleFont.fontName);
+      font.load().then(function (loadedFont) {
+        debugger
+        document.fonts.add(loadedFont);
+        listOfFonts();
+        //do something after the font is loaded
+      }).catch(function (error) {
+        // error occurred
+      });
+    })
   }, []);
 
-
-  // useEffect(() => {
-  //   fontLists.forEach(singleFont => {
-  //     const font = new FontFace(singleFont.fontName, `url(${singleFont.filePath})`, {});
-  //     // console.log(font);
-  //     document.fonts.add(font);
-  //     // document.fonts.load(singleFont.fontName);
-
-  //     font.load().then(function (loadedFont) {
-  //       document.fonts.add(loadedFont);
-  //       listOfFonts();
-  //       //do something after the font is loaded
-  //     }).catch(function (error) {
-  //       // error occurred
-  //     });
-  //     // setFontLists([...fontLists])
-  //   })
-  // }, []);
 
   const listOfFonts = () => {
     let { fonts } = document;
@@ -63,9 +63,10 @@ function FontList() {
         done = font.done;
       }
     }
-    console.log(arr)
+    console.log(arr);
     return arr;
-  }
+  };
+  listOfFonts();
 
   return (
     <>
@@ -110,7 +111,7 @@ function FontList() {
                         {item?.fontName}
                       </th>
                       <td className="py-4 px-6">
-                        <span style={{ fontFamily: loadFont(item?.fontName, item?.filePath) }}>Example Style</span>
+                        <span style={{ fontFamily: item?.fontName }}>Example Style</span>
                       </td>
 
                       <td className="py-4 px-6 text-right cursor-pointer">
@@ -129,7 +130,7 @@ function FontList() {
                       </td>
 
                       <td className="py-4 px-6 text-right cursor-pointer">
-                        <div className="font-medium text-red-600 dark:text-red-500" onClick={() => { setDeleteItem(true); setSelectedDeleteItemID(index) }}>Delete</div>
+                        <div className="font-medium text-red-600 dark:text-red-500" onClick={() => { setDeleteItem(true); setSelectedDeleteItemID(item?.id) }}>Delete</div>
                       </td>
                     </tr>
                 )

@@ -31,7 +31,7 @@ export const DeleteSingleFont = (id) => {
                 headers: {"Access-Control-Allow-Origin": "*"}
             })
             .then(response => {
-                return response?.data;
+                return true;
 
             })
             .catch(error => {

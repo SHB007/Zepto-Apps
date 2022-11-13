@@ -72,7 +72,9 @@ export const DeleteSingleFontGroup = (id) => {
     return (
         axios.delete(`${Config.baseApi}/font-group-system/api/font_group.php?id=${id}`,
             {
-                headers: {"Access-Control-Allow-Origin": "*"}
+                headers: {
+                    // "Access-Control-Allow-Origin": "*"
+                }
             })
             .then(response => {
                 return response?.data;

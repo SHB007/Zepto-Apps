@@ -41,7 +41,10 @@ function AddGroupModal(props) {
         if (emptyField) {
             setError(true);
             setErrorMessage('Please Fill the above font Selection field.');
-        } else {
+        } else if(props?.fontLists?.length == values?.selectedFontList?.length){
+            setError(true);
+            setErrorMessage('Maximum Number of Font List already added. Please Upload more file to add in the group.');
+        }else {
             setError(false);
             setErrorMessage('');
             const selectedFontList = [...values.selectedFontList, { fontName: '', selectedFontId: '*', specificSize: '1.00', priceChange: '0' }];
@@ -98,9 +101,9 @@ function AddGroupModal(props) {
             } else {
                 UpdateFontGroup(values).then(response => {
                     if (response) {
-
                         props.setModalVisible(false);
                         props?.setSuccess(true);
+                        props.setMessage('Font Group is Successfully Update.');
                     } else {
                         console.log(response)
                     }

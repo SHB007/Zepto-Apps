@@ -23,7 +23,6 @@ function FontGroup() {
         setFontLists(response);
         GetAllFontGroup().then(response => {
           if (response) {
-            console.log(response)
             setFontGroupLists(response);
           } else {
             console.log(response);
@@ -33,25 +32,21 @@ function FontGroup() {
         console.log(response);
       }
     });
-  }, []);
+  }, [success]);
 
   const editModeOn = (item, index) => {
-
     setEditData(item);
     setModalVisible(true);
     setEditMode(true);
-  }
+  };
 
 
   return (
     <>
       {success &&
-        <SuccessModal success={success} setSuccess={setSuccess} message={message} />
+        <SuccessModal success={success} setSuccess={setSuccess} message={message} setMessage={setMessage} />
       }
 
-      {/* {success &&
-        <SuccessModal success={success} setSuccess={setSuccess} message={'The Font Group is Successfully Deleted.'} />
-      } */}
 
       {deleteItem &&
         <DeleteModal
@@ -59,7 +54,7 @@ function FontGroup() {
           deleteItem={deleteItem} setDeleteItem={setDeleteItem}
           success={success} setSuccess={setSuccess}
           selectedDeleteItemID={selectedDeleteItemID} setSelectedDeleteItemID={setSelectedDeleteItemID}
-          message={'Are you sure you want to delete this Font?'} />
+          message={'Are you sure you want to delete this Font?'} setMessage={setMessage}/>
       }
 
       {modalVisible &&
@@ -109,11 +104,11 @@ function FontGroup() {
                       </th>
                       <td className="py-4 px-6">
                         {
-                          item?.selectedFontList?.map((fontList, index) => {
+                          item?.selectedFontList?.map((fontList, listIndex) => {
                             return (
-                              <span key={index}>
+                              <span key={listIndex}>
                                 <span>{(fontLists?.filter(font => font?.id == fontList?.selectedFontId))?.[0]?.fontName}</span>
-                                <span>{index !== (item?.fontList?.length - 1) && ','}</span>
+                                <span>{listIndex !== ((item?.selectedFontList?.length) - 1) && ','}</span>
                               </span>
                             )
                           })
@@ -123,7 +118,7 @@ function FontGroup() {
                         {(item?.selectedFontList?.length)}
                       </td>
                       <td className="py-4 px-6 text-right flex justify-end">
-                        <div className="mr-5 font-medium text-blue-600 dark:text-blue-500 cursor-pointer " onClick={()=>editModeOn(item,index)}>Edit</div>
+                        <div className="mr-5 font-medium text-blue-600 dark:text-blue-500 cursor-pointer " onClick={() => editModeOn(item, index)}>Edit</div>
                         <div className="font-medium text-red-600 dark:text-red-500 cursor-pointer" onClick={() => { setDeleteItem(true); setSelectedDeleteItemID(item?.id) }}>Delete</div>
                       </td>
                     </tr>
@@ -134,11 +129,11 @@ function FontGroup() {
                       </th>
                       <td className="py-4 px-6">
                         {
-                          item?.selectedFontList?.map((fontList, index) => {
+                          item?.selectedFontList?.map((fontList, listIndex2) => {
                             return (
-                              <span key={index}>
+                              <span key={listIndex2}>
                                 <span>{(fontLists?.filter(font => font?.id == fontList?.selectedFontId))?.[0]?.fontName}</span>
-                                <span>{index !== (item?.fontList?.length - 1) && ','}</span>
+                                <span>{listIndex2 !== ((item?.selectedFontList?.length) - 1) && ','}</span>
                               </span>
                             )
                           })
@@ -148,7 +143,7 @@ function FontGroup() {
                         {(item?.selectedFontList?.length)}
                       </td>
                       <td className="py-4 px-6 text-right flex justify-end">
-                        <div className="mr-5 font-medium text-blue-600 dark:text-blue-500 cursor-pointer" onClick={()=>editModeOn(item,index)}>Edit</div>
+                        <div className="mr-5 font-medium text-blue-600 dark:text-blue-500 cursor-pointer" onClick={() => editModeOn(item, index)}>Edit</div>
                         <div className="font-medium text-red-600 dark:text-red-500 cursor-pointer" onClick={() => { setDeleteItem(true); setSelectedDeleteItemID(item?.id) }}>Delete</div>
                       </td>
                     </tr>
