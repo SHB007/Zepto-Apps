@@ -1,25 +1,21 @@
 import React, { useState } from 'react';
 import { Transition } from "@headlessui/react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 
 
 function TopNavBar() {
 
   const navigate = useNavigate();
+  const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div>
       <nav className="bg-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto w-[90%]">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                {/* <img
-                className="h-8 w-8"
-                src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
-                alt="Workflow"
-              /> */}
                 <img src="//cdn.shopify.com/s/files/1/0664/7119/8934/files/Zepto-logo.png?v=1659417999&amp;width=230" loading="lazy" className='h-auto w-[180px]' width="499" height="107" alt="zeptoapps247"></img>
               </div>
               <div className="hidden md:block">
@@ -27,12 +23,14 @@ function TopNavBar() {
                   <div
                     onClick={() => { navigate('/uploadFont') }}
                     className=" hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
+                    style={{ background: (location?.pathname == '/uploadFont') ? 'gray' : '' }}
                   >
                     Upload Font
                   </div>
                   <div
                     onClick={() => { navigate('/fontList') }}
                     className=" hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
+                    style={{ background: (location?.pathname == '/fontList') ? 'gray' : '' }}
                   >
                     Font List
                   </div>
@@ -40,6 +38,7 @@ function TopNavBar() {
                   <div
                     onClick={() => { navigate('/fontGroup') }}
                     className=" hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
+                    style={{ background: (location?.pathname == '/fontGroup') ? 'gray' : '' }}
                   >
                     Font Group
                   </div>
@@ -104,18 +103,20 @@ function TopNavBar() {
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-95"
         >
-          {(ref) => (
+          {() => (
             <div className="md:hidden" id="mobile-menu">
-              <div ref={ref} className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+              <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 <div
                   onClick={() => { navigate('/uploadFont') }}
                   className=" hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
+                  style={{ background: (location?.pathname == '/uploadFont') ? 'gray' : '' }}
                 >
                   Upload Font
                 </div>
                 <div
                   onClick={() => { navigate('/fontList') }}
                   className=" hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
+                  style={{ background: (location?.pathname == '/fontList') ? 'gray' : '' }}
                 >
                   Font List
                 </div>
@@ -123,6 +124,7 @@ function TopNavBar() {
                 <div
                   onClick={() => { navigate('/fontGroup') }}
                   className=" hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
+                  style={{ background: (location?.pathname == '/fontGroup') ? 'gray' : '' }}
                 >
                   Font Group
                 </div>

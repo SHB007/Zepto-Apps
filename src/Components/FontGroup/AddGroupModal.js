@@ -1,36 +1,125 @@
 import React, { useState, useEffect } from 'react';
 import SingleFontEntity from './SingleFontEntity';
+import { CreateFontGroup, UpdateFontGroup } from '../../APIs/FontGroupApi';
+
 
 function AddGroupModal(props) {
+    const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+    const [editMode, setEditMode] = useState(false);
+    const [oneTimeFlag, setOneTimeFlag] = useState(true);
+    
+
     const [values, setValues] = useState({
         fontGroupName: '',
-        selectedFontLists: [{ fontName: '', selectedFontId: '*', specificSize: '1.00', priceChange: '0' }],
+        selectedFontList: [{ fontName: '', selectedFontId: '*', specificSize: '1.00', priceChange: '0' }],
     });
-
-    const addIntoSelectedFontLists = () => {
-        const selectedFontLists = [...values.selectedFontLists, { fontName: '', selectedFontId: '*', specificSize: '1.00', priceChange: '0' }];
-        setValues({ ...values, selectedFontLists });
-        props.setEditMode(false);
-    };
-
-
-    const deleteIntoSelectedFontLists = (index) => {
-        const selectedFontLists = [...values?.selectedFontLists]
-        selectedFontLists.splice(index, 1)
-        setValues({
-            ...values,
-            selectedFontLists
-        })
-    };
 
     useEffect(() => {
         if (props?.editMode) {
             setValues(props?.editData);
         }
+        if (oneTimeFlag && props?.editMode) {
+            setEditMode(true);
+        } else {
+            setOneTimeFlag(false);
+        }
     }, [props?.editData]);
+
+
+
+    useEffect(() => {
+        let emptyField = CheckEmptyField();
+        if (!emptyField) {
+            setError(false);
+            setErrorMessage('');
+        }
+    }, [values]);
+
+    const addIntoSelectedFontLists = () => {
+        let emptyField = CheckEmptyField();
+        if (emptyField) {
+            setError(true);
+            setErrorMessage('Please Fill the above font Selection field.');
+        } else {
+            setError(false);
+            setErrorMessage('');
+            const selectedFontList = [...values.selectedFontList, { fontName: '', selectedFontId: '*', specificSize: '1.00', priceChange: '0' }];
+            setValues({ ...values, selectedFontList });
+            props.setEditMode(false);
+        }
+
+    };
+
+    const CheckEmptyField = () => {
+        const mapping = values?.selectedFontList?.map(fontList => {
+            return (
+                fontList?.selectedFontId
+            )
+        })
+        let emptyField = (mapping?.includes('') || mapping?.includes('*'));
+        return emptyField;
+    };
+
+    const deleteIntoSelectedFontLists = (index) => {
+        const selectedFontList = [...values?.selectedFontList]
+        selectedFontList.splice(index, 1)
+        setValues({
+            ...values,
+            selectedFontList
+        })
+    };
+
+    const createNewFontGroup = () => {
+        let mapping = values?.selectedFontList?.map(fontList => {
+            return (
+                fontList?.selectedFontId
+            )
+        })
+        mapping = mapping.filter(item => {
+            return (item !== '' || item !== '*')
+        })
+        if (values?.fontGroupName == '') {
+            setError(true);
+            setErrorMessage('Please Fill the Group Title.');
+        } else if (mapping?.length >= 2) {
+            setError(false);
+            setErrorMessage('')
+            if (!editMode) {
+                CreateFontGroup(values).then(response => {
+                    if (response) {
+                        props.setModalVisible(false);
+                        props.setSuccess(true);
+                        props.setMessage('New Font Group is Successfully Created.');
+                    } else {
+                        console.log(response)
+                    }
+                })
+            } else {
+                UpdateFontGroup(values).then(response => {
+                    if (response) {
+
+                        props.setModalVisible(false);
+                        props?.setSuccess(true);
+                    } else {
+                        console.log(response)
+                    }
+                })
+            }
+
+        } else {
+            setError(true);
+            setErrorMessage('Please Fill at least two font.');
+        }
+    };
+
+
 
     return (
         <>
+
+            
+
             {props?.modalVisible &&
                 <>
                     <div
@@ -54,7 +143,7 @@ function AddGroupModal(props) {
                                             props.setEditData([]);
                                             props.setEditMode(false);
                                             props.setModalVisible(false);
-                                            }}
+                                        }}
                                     >
                                         <span className="bg-transparent text-black  h-6 w-6 text-2xl block outline-none focus:outline-none">
                                             ×
@@ -70,7 +159,7 @@ function AddGroupModal(props) {
                                         value={values?.fontGroupName}
                                         onChange={(e) => setValues({ ...values, fontGroupName: e.target.value })} />
 
-                                    {values.selectedFontLists.map((item, index) => (
+                                    {values.selectedFontList?.map((item, index) => (
                                         <div style={{ marginTop: 20 }} key={index}>
                                             <SingleFontEntity
                                                 values={values} setValues={setValues}
@@ -83,8 +172,12 @@ function AddGroupModal(props) {
                                     }
                                 </div>
 
+                                {error &&
+                                    <div className="relative p-6 text-red-500">* {errorMessage}</div>
+                                }
                                 {/* BUTTONS */}
                                 <div className="relative p-6 flex justify-between">
+
                                     <button className="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800"
                                         onClick={addIntoSelectedFontLists}
                                     >
@@ -93,9 +186,11 @@ function AddGroupModal(props) {
                                         </span>
                                     </button>
 
-                                    <button type="button" className="text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
+                                    <button type="button" className="text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+                                        onClick={createNewFontGroup}
+                                    >
                                         <span className="relative px-5 py-2.5 transition-all ease-in duration-75  dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-                                            Create
+                                            {editMode ? 'Update' : 'Create'}
                                         </span>
                                     </button>
 

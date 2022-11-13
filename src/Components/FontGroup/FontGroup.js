@@ -1,27 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AddGroupModal from './AddGroupModal';
-
+import SuccessModal from './../Modals/SuccessModal';
+import { GetAllFonts } from '../../APIs/FontListApi';
+import { GetAllFontGroup } from '../../APIs/FontGroupApi';
+import DeleteModal from '../Modals/DeleteModal';
 
 function FontGroup() {
-
+  const [success, setSuccess] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [editData, setEditData] = useState({});
   const [editMode, setEditMode] = useState(false);
+  const [message, setMessage] = useState('');
+  const [fontLists, setFontLists] = useState();
+  const [fontGroupLists, setFontGroupLists] = useState();
 
-  const [fontLists, setFontLists] = useState([
-    { id: 0, fontName: 'Roboto-Black', filePath: 'src/Assets/Roboto-Black.ttf' },
-    { id: 1, fontName: 'Roboto-Bold', filePath: 'src/Assets/Roboto-Bold.ttf' },
-    { id: 2, fontName: 'Roboto-Italic', filePath: 'src/Assets/Roboto-Italic.ttf' },
-    { id: 3, fontName: 'Roboto-Thin', filePath: 'src/Assets/Roboto-Thin.ttf' },
-    { id: 4, fontName: 'Roboto-ThinItalic', filePath: 'src/Assets/Roboto-ThinItalic.ttf' }
-  ]);
-  const [fontGroupLists, setFontGroupLists] = useState([
-    { id: 0, fontGroupName: 'Ex-1', selectedFontLists: [{ fontName: 'ABC', selectedFontId: '0', specificSize: '10.00', priceChange: '10' }, { fontName: 'DEF', selectedFontId: '1', specificSize: '20.00', priceChange: '20' }] },
-    { id: 1, fontGroupName: 'Ex-2', selectedFontLists: [{ fontName: 'GHI', selectedFontId: '2', specificSize: '30.00', priceChange: '30' }, { fontName: 'JKL', selectedFontId: '3', specificSize: '40.00', priceChange: '40' }] },
-    { id: 2, fontGroupName: 'Ex-3', selectedFontLists: [{ fontName: 'MNO', selectedFontId: '4', specificSize: '50.00', priceChange: '50' }, { fontName: 'PQR', selectedFontId: '1', specificSize: '60.00', priceChange: '60' }] },
-    { id: 3, fontGroupName: 'Ex-4', selectedFontLists: [{ fontName: 'STU', selectedFontId: '2', specificSize: '70.00', priceChange: '70' }, { fontName: 'VWX', selectedFontId: '3', specificSize: '8000', priceChange: '80' }] },
-    { id: 4, fontGroupName: 'Ex-5', selectedFontLists: [{ fontName: 'YZ', selectedFontId: '4', specificSize: '9000', priceChange: '90' }, { fontName: 'ab', selectedFontId: '1', specificSize: '100.00', priceChange: '100' }] }
-  ]);
+  const [deleteItem, setDeleteItem] = useState(false);
+  const [selectedDeleteItemID, setSelectedDeleteItemID] = useState();
+
+  useEffect(() => {
+    GetAllFonts().then(response => {
+      if (response) {
+        setFontLists(response);
+        GetAllFontGroup().then(response => {
+          if (response) {
+            console.log(response)
+            setFontGroupLists(response);
+          } else {
+            console.log(response);
+          }
+        });
+      } else {
+        console.log(response);
+      }
+    });
+  }, []);
 
   const editModeOn = (item, index) => {
 
@@ -33,11 +45,26 @@ function FontGroup() {
 
   return (
     <>
+      {success &&
+        <SuccessModal success={success} setSuccess={setSuccess} message={message} />
+      }
 
+      {/* {success &&
+        <SuccessModal success={success} setSuccess={setSuccess} message={'The Font Group is Successfully Deleted.'} />
+      } */}
+
+      {deleteItem &&
+        <DeleteModal
+          mother={'fontGroup'}
+          deleteItem={deleteItem} setDeleteItem={setDeleteItem}
+          success={success} setSuccess={setSuccess}
+          selectedDeleteItemID={selectedDeleteItemID} setSelectedDeleteItemID={setSelectedDeleteItemID}
+          message={'Are you sure you want to delete this Font?'} />
+      }
 
       {modalVisible &&
         <AddGroupModal modalVisible={modalVisible} setModalVisible={setModalVisible} fontLists={fontLists} editData={editData} setEditData={setEditData}
-          editMode={editMode} setEditMode={setEditMode} />
+          editMode={editMode} setEditMode={setEditMode} success={success} setSuccess={setSuccess} setMessage={setMessage} />
       }
 
       <div className="w-[90%] mx-auto my-5 bg-white rounded-lg border shadow-md dark:bg-gray-800 dark:border-gray-700">
@@ -82,7 +109,7 @@ function FontGroup() {
                       </th>
                       <td className="py-4 px-6">
                         {
-                          item?.selectedFontLists?.map((fontList, index) => {
+                          item?.selectedFontList?.map((fontList, index) => {
                             return (
                               <span key={index}>
                                 <span>{(fontLists?.filter(font => font?.id == fontList?.selectedFontId))?.[0]?.fontName}</span>
@@ -93,11 +120,11 @@ function FontGroup() {
                         }
                       </td>
                       <td className="py-4 px-6">
-                        {(item?.selectedFontLists?.length)}
+                        {(item?.selectedFontList?.length)}
                       </td>
                       <td className="py-4 px-6 text-right flex justify-end">
-                        <div className="mr-5 font-medium text-blue-600 dark:text-blue-500 cursor-pointer " onClick={() => editModeOn(item, index)}>Edit</div>
-                        <div className="font-medium text-red-600 dark:text-red-500 cursor-pointer">Delete</div>
+                        <div className="mr-5 font-medium text-blue-600 dark:text-blue-500 cursor-pointer " onClick={()=>editModeOn(item,index)}>Edit</div>
+                        <div className="font-medium text-red-600 dark:text-red-500 cursor-pointer" onClick={() => { setDeleteItem(true); setSelectedDeleteItemID(item?.id) }}>Delete</div>
                       </td>
                     </tr>
                     :
@@ -107,7 +134,7 @@ function FontGroup() {
                       </th>
                       <td className="py-4 px-6">
                         {
-                          item?.selectedFontLists?.map((fontList, index) => {
+                          item?.selectedFontList?.map((fontList, index) => {
                             return (
                               <span key={index}>
                                 <span>{(fontLists?.filter(font => font?.id == fontList?.selectedFontId))?.[0]?.fontName}</span>
@@ -118,11 +145,11 @@ function FontGroup() {
                         }
                       </td>
                       <td className="py-4 px-6">
-                        {(item?.selectedFontLists?.length)}
+                        {(item?.selectedFontList?.length)}
                       </td>
                       <td className="py-4 px-6 text-right flex justify-end">
-                        <div className="mr-5 font-medium text-blue-600 dark:text-blue-500 cursor-pointer" onClick={() => editModeOn(item, index)}>Edit</div>
-                        <div className="font-medium text-red-600 dark:text-red-500 cursor-pointer">Delete</div>
+                        <div className="mr-5 font-medium text-blue-600 dark:text-blue-500 cursor-pointer" onClick={()=>editModeOn(item,index)}>Edit</div>
+                        <div className="font-medium text-red-600 dark:text-red-500 cursor-pointer" onClick={() => { setDeleteItem(true); setSelectedDeleteItemID(item?.id) }}>Delete</div>
                       </td>
                     </tr>
                 )

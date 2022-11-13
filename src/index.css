@@ -55,8 +55,12 @@
 #fontSelection .css-1s2u09g-control,
 #fontSelection .css-1pahdxg-control {
     height: 43px !important;
-    min-width: 120px !important;
-    width: 160px !important;
+    /* min-width: 120px !important;
+    width: 200% !important; */
+}
+
+#fontSelection .css-b62m3t-container {
+    width: 100% !important;
 }
 
 .css-1hb7zxy-IndicatorsContainer {
