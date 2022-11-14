@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import DeleteModal from '../Modals/DeleteModal';
 import SuccessModal from '../Modals/SuccessModal';
 import { GetAllFonts } from '../../APIs/FontListApi';
+import Config from '../../Config';
 
 function FontList() {
   const [deleteItem, setDeleteItem] = useState(false);
@@ -9,15 +10,7 @@ function FontList() {
   const [success, setSuccess] = useState(false);
 
   const [fontLists, setFontLists] = useState();
-  const [fontListsTexts, setFontListsTexts] = useState();
-
-  function loadFont(name, url) {
-    var newStyle = document.createElement('style');
-    newStyle.appendChild(document.createTextNode('@font-face{font-family: ' + name + '; src: url(' + url + ');}'));
-    document.body.appendChild(newStyle)
-    return name;
-  }
-
+  const [fontFamilyInDOM, setFontFamilyInDOM] = useState();
 
   useEffect(() => {
     GetAllFonts().then(response => {
@@ -29,26 +22,25 @@ function FontList() {
     })
   }, [success]);
 
-
+  // For Reference => https://webplatform.github.io/docs/tutorials/typography/fontface/
   useEffect(() => {
-    const tempStore = [];
     fontLists?.forEach(singleFont => {
-      // const font = new FontFace(singleFont.fontName, `url(${singleFont.filePath})`, {});
-      const font = new FontFace(singleFont.fontName, `url('https://github.com/SHB007/Zepto-Apps/blob/952a133eff80e19b802423bff83aaeec7bb30ffd/src/Assets/DancingScript-VariableFont_wght.ttf')`, {});
-      tempStore?.push(<span style={{fontFamily:font}}> Example Style</span>)
-      // console.log(font);
-      // document.fonts.add(font);
-      // document.fonts.load(singleFont.fontName);
+      if(!(fontFamilyInDOM?.includes((singleFont.fontName)?.split('.')?.[0]))){
+        const font = new FontFace((singleFont.fontName)?.split('.')?.[0], `url(${Config.baseApi}/font-group-system/${singleFont.filePath})`, {});
+
+      document.fonts.add(font);
       font.load().then(function (loadedFont) {
+        debugger
         document.fonts.add(loadedFont);
-        listOfFonts();
+        document.body.style.fontFamily = `${singleFont.fontName}, serif`;
         //do something after the font is loaded
       }).catch(function (error) {
         // error occurred
       });
+      }
+      
     });
-    // console.log(tempStore)
-    setFontListsTexts([...tempStore])
+    listOfFonts();
   }, [fontLists]);
 
 
@@ -67,10 +59,16 @@ function FontList() {
         done = font.done;
       }
     }
+    arr = arr?.map(item=>{
+      return(item?.family)
+    });
     console.log(arr);
+
+    debugger;
+    setFontFamilyInDOM([...arr]);
     return arr;
   };
-  listOfFonts();
+  
 
   return (
     <>
@@ -86,6 +84,7 @@ function FontList() {
           selectedDeleteItemID={selectedDeleteItemID} setSelectedDeleteItemID={setSelectedDeleteItemID}
           message={'Are you sure you want to delete this Font?'} />
       }
+
       <div className="w-[90%] mx-auto my-5 bg-white rounded-lg border shadow-md dark:bg-gray-800 dark:border-gray-700">
         <div className="overflow-x-auto relative shadow-md sm:rounded-lg">
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -115,8 +114,7 @@ function FontList() {
                         {item?.fontName}
                       </th>
                       <td className="py-4 px-6">
-                        <span style={{ fontFamily: 'Roboto-ThinItalic' }}>Example Style</span>
-                        {/* {fontListsTexts[index]} */}
+                        <span style={{ fontFamily: `${(item.fontName)?.split('.')?.[0]}` }}>Example Style</span>
                       </td>
 
                       <td className="py-4 px-6 text-right cursor-pointer">
@@ -130,8 +128,7 @@ function FontList() {
                         {item?.fontName}
                       </th>
                       <td className="py-4 px-6">
-                        <span style={{ fontFamily: item?.fontName }}>Example Style</span>
-                        {/* {fontListsTexts[index]} */}
+                        <span style={{ fontFamily: `${(item.fontName)?.split('.')?.[0]}` }}>Example Style</span>
                       </td>
 
                       <td className="py-4 px-6 text-right cursor-pointer">
@@ -146,6 +143,7 @@ function FontList() {
           <br /><br />
         </div>
       </div>
+
     </>
 
   )
