@@ -39,6 +39,6 @@
 
 @font-face {
     font-family: 'Roboto-ThinItalic';
-    src: url('./Assets/Roboto-ThinItalic.ttf') format('ttf');
+    src: url('https://drive.google.com/file/d/1UIyl0e5bPwZdDNcL37ZFJjPp4Cq48fgj/view') format('truetype');
     /* and this for every font */
 }

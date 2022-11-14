@@ -86,7 +86,7 @@ function UploadFont() {
                             <div className="flex items-center justify-center flex-col w-[50%] border-r-4 border-black-500 border-dashed h-56">
                                 <span className='font-bold'>Last Uploaded File Details...</span><br />
                                 <div><span className='font-bold'>Name: </span> {selectedFile?.name} </div> <br />
-                                <div><span className='font-bold'>Size: </span> {selectedFile?.size} B </div> <br />
+                                <div><span className='font-bold'>Size: </span> {selectedFile?.size} KB </div> <br />
                             </div>
 
                             <div className="w-[50%] m-auto h-56 flex justify-around items-center">

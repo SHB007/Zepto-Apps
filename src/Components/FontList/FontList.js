@@ -33,14 +33,13 @@ function FontList() {
   useEffect(() => {
     const tempStore = [];
     fontLists?.forEach(singleFont => {
-      const font = new FontFace(singleFont.fontName, `url(${singleFont.filePath})`, {});
-      // debugger
+      // const font = new FontFace(singleFont.fontName, `url(${singleFont.filePath})`, {});
+      const font = new FontFace(singleFont.fontName, `url('https://github.com/SHB007/Zepto-Apps/blob/952a133eff80e19b802423bff83aaeec7bb30ffd/src/Assets/DancingScript-VariableFont_wght.ttf')`, {});
       tempStore?.push(<span style={{fontFamily:font}}> Example Style</span>)
-      console.log(font);
+      // console.log(font);
       // document.fonts.add(font);
       // document.fonts.load(singleFont.fontName);
       font.load().then(function (loadedFont) {
-        debugger
         document.fonts.add(loadedFont);
         listOfFonts();
         //do something after the font is loaded
@@ -48,7 +47,7 @@ function FontList() {
         // error occurred
       });
     });
-    console.log(tempStore)
+    // console.log(tempStore)
     setFontListsTexts([...tempStore])
   }, [fontLists]);
 
@@ -68,7 +67,7 @@ function FontList() {
         done = font.done;
       }
     }
-    // console.log(arr);
+    console.log(arr);
     return arr;
   };
   listOfFonts();
@@ -116,8 +115,8 @@ function FontList() {
                         {item?.fontName}
                       </th>
                       <td className="py-4 px-6">
-                        {/* <span style={{ fontFamily: item?.fontName }}>Example Style</span> */}
-                        {fontListsTexts[index]}
+                        <span style={{ fontFamily: 'Roboto-ThinItalic' }}>Example Style</span>
+                        {/* {fontListsTexts[index]} */}
                       </td>
 
                       <td className="py-4 px-6 text-right cursor-pointer">
@@ -131,8 +130,8 @@ function FontList() {
                         {item?.fontName}
                       </th>
                       <td className="py-4 px-6">
-                        {/* <span style={{ fontFamily: item?.fontName }}>Example Style</span> */}
-                        {fontListsTexts[index]}
+                        <span style={{ fontFamily: item?.fontName }}>Example Style</span>
+                        {/* {fontListsTexts[index]} */}
                       </td>
 
                       <td className="py-4 px-6 text-right cursor-pointer">
